@@ -1,25 +1,31 @@
-// =========================
-// Mobile Navigation
-// =========================
+// ==========================
+// Sticky Navbar
+// ==========================
+
+const header = document.querySelector(".header");
+
+window.addEventListener("scroll", () => {
+
+    if (window.scrollY > 50) {
+
+        header.classList.add("sticky");
+
+    } else {
+
+        header.classList.remove("sticky");
+
+    }
+
+});
 
 
-const navbar = document.querySelector(".navbar");
+// ==========================
+// Mobile Menu
+// ==========================
+
+const menuButton = document.querySelector(".menu-button");
+
 const navLinks = document.querySelector(".nav-links");
-
-
-// Create mobile menu button
-
-const menuButton = document.createElement("button");
-
-menuButton.classList.add("menu-button");
-
-menuButton.innerHTML = "☰";
-
-navbar.insertBefore(menuButton, navLinks);
-
-
-
-// Open and close mobile menu
 
 menuButton.addEventListener("click", () => {
 
@@ -28,93 +34,98 @@ menuButton.addEventListener("click", () => {
 });
 
 
+// ==========================
+// Scroll Reveal
+// ==========================
+
+const sections = document.querySelectorAll("section");
+
+const revealSections = () => {
+
+    sections.forEach(section => {
+
+        const top = section.getBoundingClientRect().top;
+
+        if (top < window.innerHeight - 100) {
+
+            section.classList.add("show");
+
+        }
+
+    });
+
+};
+
+window.addEventListener("scroll", revealSections);
+
+revealSections();
 
 
-// Close menu after clicking a link
+// ==========================
+// Active Navigation
+// ==========================
 
-document.querySelectorAll(".nav-links a").forEach(link => {
+const navItems = document.querySelectorAll(".nav-links a");
 
-    link.addEventListener("click", () => {
+window.addEventListener("scroll", () => {
 
-        navLinks.classList.remove("active");
+    let current = "";
+
+    sections.forEach(section => {
+
+        const sectionTop = section.offsetTop - 120;
+
+        if (pageYOffset >= sectionTop) {
+
+            current = section.getAttribute("id");
+
+        }
+
+    });
+
+    navItems.forEach(link => {
+
+        link.classList.remove("active");
+
+        if (link.getAttribute("href") === "#" + current) {
+
+            link.classList.add("active");
+
+        }
 
     });
 
 });
 
 
+// ==========================
+// Scroll To Top Button
+// ==========================
 
+const scrollBtn = document.getElementById("scrollTopBtn");
 
+window.addEventListener("scroll", () => {
 
+    if (window.scrollY > 300) {
 
+        scrollBtn.classList.add("show");
 
+    } else {
 
-// =========================
-// Scroll Animation
-// =========================
+        scrollBtn.classList.remove("show");
 
-
-const animatedElements = document.querySelectorAll(
-    ".hero-content, .hero-image, .menu-card, .gallery-images img, .contact-card"
-);
-
-
-
-const observer = new IntersectionObserver(
-
-    (entries) => {
-
-
-        entries.forEach(entry => {
-
-
-            if(entry.isIntersecting) {
-
-
-                entry.target.classList.add("show");
-
-
-            }
-
-
-        });
-
-
-    },
-
-    {
-        threshold: 0.15
     }
-
-
-);
-
-
-
-
-animatedElements.forEach(element => {
-
-    observer.observe(element);
 
 });
 
+scrollBtn.addEventListener("click", () => {
 
+    window.scrollTo({
 
+        top: 0,
 
+        behavior: "smooth"
 
+    });
 
-
-
-// =========================
-// Current Year Footer
-// =========================
-
-
-const footerYear = document.querySelector(".footer p");
-
-
-const currentYear = new Date().getFullYear();
-
-
-footerYear.innerHTML =
-`© ${currentYear} Savoria Kitchen. All rights reserved.`;
+});
